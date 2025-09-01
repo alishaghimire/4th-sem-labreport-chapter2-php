@@ -1,34 +1,53 @@
 <?php
-session_start();
-const PI = 3.14;
-function area($radius){
-    return PI*$radius*$radius;
+define("PI", 3.1416);
+
+$err = [];
+$radius = "";
+$areaResult = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST['radius']) && !empty($_POST['radius']) && trim($_POST['radius'])) {
+        $radius = floatval($_POST['radius']);
+        if ($radius < 0) {
+            $err['radius'] = 'Radius cannot be negative.';
+        }
+    } else {
+        $err['radius'] = 'Radius is required.';
+    }
+
+    if (empty($err)) {
+        function calculateCircleArea($r) {
+            return PI * $r * $r;
+        }
+
+        $area = calculateCircleArea($radius);
+        $areaResult = "The area of the circle with radius $radius is: $area";
+    }
 }
 ?>
 
-<?php
-if($_SERVER['REQUEST_METHOD']=="POST"){
-    $radius = $_POST['radius'];
-    $result = area($radius);
-    $_SESSION['message'] = "Area of circle with radius = $radius is $result";
-    header("Location: ".$_SERVER['PHP_SELF']);
-    exit;
-}
-?>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Area</title>
+<head>
+    <title>Circle Area Calculator</title>
 </head>
 <body>
-    <form method="POST">
-        <h1>Radius Calculator</h1>
-        <input type="number" step="any" name="radius" placeholder="Radius">
-        <input type="submit" value="Calculate Area">
-    </form>
+
+<h2>Calculate Area of Circle</h2>
+
+<form method="post">
+    <label for="radius">Radius:</label>
+    <input type="number" name="radius" id="radius" value="<?php echo isset($radius) ? $radius : ''; ?>" />
+    <?php echo isset($err['radius']) ? $err['radius'] : ''; ?><br><br>
+
+    <input type="submit" value="Calculate Area">
+
     <?php
-    if(isset($_SESSION['message'])){
-        echo $_SESSION['message'];
-        unset($_SESSION['message']);
-    }?>
+    if (!empty($areaResult)) {
+        echo "<h3>$areaResult</h3>";
+    }
+    ?>
+</form>
+
 </body>
 </html>
