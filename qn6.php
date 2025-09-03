@@ -24,15 +24,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Age Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age calculator</title>
 </head>
 <body>
     <h1>Calculate Age in Days</h1>
     <form method="POST">
         <label for="age">Age in Years:</label>
-        <input type="number" name="age" id="age" placeholder="Enter your age"
-               value="<?php echo isset($_POST['age']) ? htmlspecialchars($_POST['age']) : ''; ?>" />
-        <?php echo isset($err['age']) ? "<p style='color:red;'>{$err['age']}</p>" : ''; ?>
+        <input type="number" name="age" id="age" 
+value="<?php echo isset($_POST['age']) ? htmlspecialchars($_POST['age']) : ''; ?>" />
+        <?php echo isset($err['age']) ? "{$err['age']}" : ''; ?>
         <br><br>
         <input type="submit" value="Convert to Days">
     </form>
