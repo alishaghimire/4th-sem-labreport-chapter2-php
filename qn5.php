@@ -1,34 +1,27 @@
 <?php
 $err = [];
-$base = $height = "";
 $areaResult = "";
 
-// Validation
+// Validation and calculation
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (isset($_POST['base']) && trim($_POST['base']) !== "") {
-        $base = floatval(trim($_POST['base']));
-        if ($base <= 0) {
-            $err['base'] = "Base must be a positive number.";
-        }
+    if (isset($_POST['base']) && !empty($_POST['base']) && trim($_POST['base'])) {
+        $base = floatval($_POST['base']);
     } else {
-        $err['base'] = "Base is required.";
+        $err['base'] = 'Base is required.';
     }
 
-    if (isset($_POST['height']) && trim($_POST['height']) !== "") {
-        $height = floatval(trim($_POST['height']));
-        if ($height <= 0) {
-            $err['height'] = "Height must be a positive number.";
-        }
+    if (isset($_POST['height']) && !empty($_POST['height']) && trim($_POST['height'])) {
+        $height = floatval($_POST['height']);
     } else {
-        $err['height'] = "Height is required.";
+        $err['height'] = 'Height is required.';
     }
 
     if (empty($err)) {
-        function triangleArea($base, $height) {
+        function getTriangleArea($base, $height) {
             return 0.5 * $base * $height;
         }
 
-        $area = triangleArea($base, $height);
+        $area = getTriangleArea($base, $height);
         $areaResult = "The area of the triangle is: $area";
     }
 }
@@ -47,13 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <label for="base">Base:</label>
     <input type="number" step="any" name="base" id="base" value="<?php echo htmlspecialchars($base); ?>">
     <?php if (isset($err['base'])) echo "<p>" . $err['base'] . "</p>"; ?>
-
     <br><br>
 
     <label for="height">Height:</label>
     <input type="number" step="any" name="height" id="height" value="<?php echo htmlspecialchars($height); ?>">
     <?php if (isset($err['height'])) echo "<p>" . $err['height'] . "</p>"; ?>
-
     <br><br>
 
     <input type="submit" value="Calculate Area">
